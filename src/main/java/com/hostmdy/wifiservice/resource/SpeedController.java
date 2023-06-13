@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hostmdy.wifiservice.domain.Speed;
+import com.hostmdy.wifiservice.domain.WifiPlan;
+import com.hostmdy.wifiservice.repository.WifiPlanRepository;
 import com.hostmdy.wifiservice.service.SpeedService;
 import com.hostmdy.wifiservice.service.ValidationErrorsMapService;
 
@@ -27,20 +29,30 @@ public class SpeedController {
 	
 	private final SpeedService speedService;
 	private final ValidationErrorsMapService errorMapService;
+	private final WifiPlanRepository planRepository;
+	
+	
 	
 	@Autowired
-	public SpeedController(SpeedService speedService, ValidationErrorsMapService errorMapService) {
+	public SpeedController(SpeedService speedService, ValidationErrorsMapService errorMapService,
+			WifiPlanRepository planRepository) {
 		super();
 		this.speedService = speedService;
 		this.errorMapService = errorMapService;
+		this.planRepository = planRepository;
 	}
-	
-	
-	@PostMapping("/create")
-	public ResponseEntity<?> createSpeed(@Valid @RequestBody Speed speed, BindingResult result) {
+
+	@PostMapping("plan/{id}/create")
+	public ResponseEntity<?> createSpeed(@PathVariable Long id,@Valid @RequestBody Speed speed, BindingResult result) {
 		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
 		if (responseErrorObject != null)
 			return responseErrorObject;
+		
+		//WifiPlan plan = planRepository.findById(id).get();
+		WifiPlan plan = planRepository.findById(id).get();
+		 speed.setPlan(plan);
+		 plan.getSpeed().add(speed);
+		
 System.out.println("Hahah");
 		Speed createSpeed = speedService.createSpeed(speed);
 		return new ResponseEntity<Speed>(createSpeed, HttpStatus.CREATED);
