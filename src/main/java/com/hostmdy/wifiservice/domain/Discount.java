@@ -1,9 +1,13 @@
 package com.hostmdy.wifiservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +35,11 @@ public class Discount {
 
 	@NotBlank(message="Fill Your Amount")
 	private String discountAmount;
+	
+	 @ManyToOne
+	    @JoinColumn(name = "speed_id")
+	    @JsonIgnore
+	    private Speed speed;
 
 
 //	public Discount(Long id, @NotNull(message = "Enter Your month") Integer months,

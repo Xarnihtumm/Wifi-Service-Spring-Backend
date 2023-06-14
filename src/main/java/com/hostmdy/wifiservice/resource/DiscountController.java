@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hostmdy.wifiservice.domain.Discount;
+import com.hostmdy.wifiservice.domain.Speed;
+import com.hostmdy.wifiservice.repository.SpeedRepository;
 import com.hostmdy.wifiservice.service.DiscountService;
 import com.hostmdy.wifiservice.service.ValidationErrorsMapService;
 
@@ -28,23 +30,34 @@ public class DiscountController {
 	
 	private final DiscountService discountService;
 	private final ValidationErrorsMapService errorMapService;
+	private final SpeedRepository speedRepository;
+	
+	
+	
 	
 	
 	@Autowired
-	public DiscountController(DiscountService discountService, ValidationErrorsMapService errorMapService) {
+	public DiscountController(DiscountService discountService, ValidationErrorsMapService errorMapService,
+			SpeedRepository speedRepository) {
 		super();
 		this.discountService = discountService;
 		this.errorMapService = errorMapService;
+		this.speedRepository = speedRepository;
 	}
-	
-	
-	
-	@PostMapping("/create")
-	public ResponseEntity<?> createDiscount(@Valid @RequestBody Discount discount, BindingResult result) {
+
+	@PostMapping("speed/{id}/create")
+	public ResponseEntity<?> createDiscount( @PathVariable Long id,@Valid @RequestBody Discount discount, BindingResult result) {
 		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
 		if (responseErrorObject != null)
 			return responseErrorObject;
-System.out.println("Hahah");
+		
+		Speed speed = speedRepository.findById(id).get();
+		
+		discount.setSpeed(speed);
+		speed.getDiscount().add(discount);
+//		order.setUser(user);
+//		user.getOrders().add(order);
+		
 		Discount createDiscount = discountService.createDiscount(discount);
 		return new ResponseEntity<Discount>(createDiscount, HttpStatus.CREATED);
 	}
