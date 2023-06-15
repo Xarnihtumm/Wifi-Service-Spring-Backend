@@ -29,6 +29,9 @@ public class Discount {
 	@NotNull(message="Enter Your month")
 	private Integer months;
 	
+	@NotNull(message = "Pay For Prices")
+	private Double prices;
+	
 	@NotBlank(message="Fill Your Name")
 	private String discountName;
 	

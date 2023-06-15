@@ -21,48 +21,32 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name="speed")
+@Table(name = "speed")
 public class Speed {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	 
-	@NotNull(message="Chooser Your Speed")
+
+	@NotNull(message = "Chooser Your Speed")
 	private Integer mb;
-	
-	 @ManyToOne
-	    @JoinColumn(name = "plan_id")
-	    @JsonIgnore
-	    private WifiPlan plan;
-	 
-	 
-	 @OneToMany(mappedBy = "speed",cascade = CascadeType.ALL, orphanRemoval = true)
-	    
-	    private List<Discount> discount = new ArrayList<>();
+
+	@ManyToOne
+	@JoinColumn(name = "plan_id")
+	@JsonIgnore
+	private WifiPlan plan;
 
 	
-	@NotNull(message="Pay For Prices")
-	private Double prices;
+	@OneToMany(mappedBy = "speed", cascade = CascadeType.ALL, orphanRemoval = true)
 
-	public Speed(Long id, @NotNull(message = "Chooser Your Speed") Integer mb,
-			@NotNull(message = "Pay For Prices") Double prices) {
+	private List<Discount> discount = new ArrayList<>();
+
+
+	public Speed(Long id, @NotNull(message = "Chooser Your Speed") Integer mb) {
 		super();
 		this.id = id;
 		this.mb = mb;
-		this.prices = prices;
 	}
 
-	
-
-	
-
-	
-
-	
-
-	
-	
-	
 	
 }
