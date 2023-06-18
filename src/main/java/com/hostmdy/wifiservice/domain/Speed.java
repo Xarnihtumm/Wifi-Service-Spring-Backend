@@ -3,10 +3,13 @@ package com.hostmdy.wifiservice.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,12 +36,13 @@ public class Speed {
 
 	@ManyToOne
 	@JoinColumn(name = "plan_id")
-	@JsonIgnore
+	//@JsonIgnore
+	 @JsonBackReference
 	private WifiPlan plan;
 
 	
-	@OneToMany(mappedBy = "speed", cascade = CascadeType.ALL, orphanRemoval = true)
-
+	@OneToMany(mappedBy = "speed", orphanRemoval = true)
+	@JsonManagedReference
 	private List<Discount> discount = new ArrayList<>();
 
 

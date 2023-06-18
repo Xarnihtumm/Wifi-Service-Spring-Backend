@@ -3,8 +3,11 @@ package com.hostmdy.wifiservice.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,11 +17,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name="Plan")
+@Table(name = "Plan")
 public class WifiPlan {
 
 	@Id
@@ -27,24 +29,14 @@ public class WifiPlan {
 
 	@NotBlank(message = "Please provide your name")
 	private String planName;
-	
-	
-	
-	 @OneToMany(mappedBy = "plan",cascade = CascadeType.ALL, orphanRemoval = true)
-	 private List<Speed> speed = new ArrayList<>();
+	@JsonManagedReference
+	@OneToMany(mappedBy = "plan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Speed> speed = new ArrayList<>();
 
 	public WifiPlan(Long id, @NotBlank(message = "Please provide your name") String planName) {
 		super();
 		this.id = id;
 		this.planName = planName;
 	}
-	
-	
-	
-	
-	
-	
-	
-
 
 }

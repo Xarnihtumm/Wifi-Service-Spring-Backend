@@ -1,8 +1,10 @@
 package com.hostmdy.wifiservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,9 +41,9 @@ public class Discount {
 	@NotBlank(message="Fill Your Amount")
 	private String discountAmount;
 	
-	 @ManyToOne
+	 @ManyToOne(fetch = FetchType.EAGER)
 	    @JoinColumn(name = "speed_id")
-	    @JsonIgnore
+	    @JsonBackReference
 	    private Speed speed;
 
 
