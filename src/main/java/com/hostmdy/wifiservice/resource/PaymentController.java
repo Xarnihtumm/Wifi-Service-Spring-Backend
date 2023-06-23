@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hostmdy.wifiservice.domain.Order;
 import com.hostmdy.wifiservice.domain.Payment;
+import com.hostmdy.wifiservice.repository.OrderRepository;
 import com.hostmdy.wifiservice.service.PaymentService;
 import com.hostmdy.wifiservice.service.ValidationErrorsMapService;
 
@@ -23,31 +26,48 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/payment")
+@CrossOrigin(origins ="http://localhost:3000")
 public class PaymentController {
 	
 	
 	private final PaymentService paymentService;
+	private final OrderRepository orderRepository;
 	private final ValidationErrorsMapService errorMapService;
 	
 	
 	@Autowired
-	public PaymentController(PaymentService paymentService, ValidationErrorsMapService errorMapService) {
+	public PaymentController(PaymentService paymentService, OrderRepository orderRepository,
+			ValidationErrorsMapService errorMapService) {
 		super();
 		this.paymentService = paymentService;
+		this.orderRepository = orderRepository;
 		this.errorMapService = errorMapService;
 	}
 	
 	
-	@PostMapping("/create")
-	public ResponseEntity<?> createPayment(@Valid @RequestBody Payment payment, BindingResult result) {
+	
+	@PostMapping("/create/order/{orderId}")
+	public ResponseEntity<?> createPayment(@PathVariable Long orderId,@Valid @RequestBody Payment payment, BindingResult result) {
 		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
 		if (responseErrorObject != null)
 			return responseErrorObject;
-
+		
+		Order order = orderRepository.findById(orderId).get();
+		
+		 if (order.getOrderStatus().equals("Success")) 
+		{	
+		payment.setOrder(order);
+		order.getPayment();
+		}
+		else {
+			System.out.println(order.getOrderStatus());
+			return new ResponseEntity<String>("Order with id = " + orderId + "is Ongoing.", HttpStatus.NOT_FOUND);}
 		Payment createPayment = paymentService.createOrder(payment);
 		return new ResponseEntity<Payment>(createPayment, HttpStatus.CREATED);
 	}
 	
+	
+
 	@GetMapping("/all")
 	public List<Payment> findAllPayment() {
 		return paymentService.findAllPayment();

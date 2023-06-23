@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -23,24 +25,20 @@ public class Payment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long paymentId;
 
-	@NotNull(message = "Jesus")
-	private Boolean status;
 
 	@NotNull(message = "Pay For Your Fee")
-	private Double prices;
+	private Integer totalPrices;
 
 	private LocalDate date;
 	
 	
+	@OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+	
+	
 
-	public Payment(Long paymentId, @NotNull(message = "Jesus") Boolean status,
-			@NotNull(message = "Pay For Your Fee") Double prices, LocalDate date) {
-		super();
-		this.paymentId = paymentId;
-		this.status = status;
-		this.prices = prices;
-		this.date = date;
-	}
+	
 	
 	@PrePersist
 	void OnCreate() {
@@ -51,5 +49,18 @@ public class Payment {
 	void OnUpdate() {
 		this.date = LocalDate.now();
 	}
+
+	public Payment(Long paymentId, @NotNull(message = "Pay For Your Fee") Integer totalPrices, LocalDate date,
+			Order order) {
+		super();
+		this.paymentId = paymentId;
+		this.totalPrices = totalPrices;
+		this.date = date;
+		this.order = order;
+	}
+
+	
+
+	
 
 }

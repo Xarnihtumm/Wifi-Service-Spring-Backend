@@ -47,7 +47,7 @@ public class DiscountController {
 		this.speedRepository = speedRepository;
 	}
 
-	@PostMapping("speed/{id}/create")
+	@PostMapping("create/speed/{id}")
 	public ResponseEntity<?> createDiscount( @PathVariable Long id,@Valid @RequestBody Discount discount, BindingResult result) {
 		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
 		if (responseErrorObject != null)

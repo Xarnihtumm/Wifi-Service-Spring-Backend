@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +29,12 @@ public class WifiPlan {
 
 	@NotBlank(message = "Please provide your name")
 	private String planName;
+
+	// @JsonManagedReference
+	// @JsonIgnore
+//	@OneToMany(mappedBy = "plan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "plan", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	@JsonManagedReference
-	@OneToMany(mappedBy = "plan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Speed> speed = new ArrayList<>();
 
 	public WifiPlan(Long id, @NotBlank(message = "Please provide your name") String planName) {

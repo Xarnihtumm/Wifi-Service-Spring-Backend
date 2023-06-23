@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,6 +41,12 @@ public class Speed {
 	@OneToMany(mappedBy = "speed", orphanRemoval = true)
 	@JsonManagedReference
 	private List<Discount> discount = new ArrayList<>();
+	//code by zar ni tun
+
+	
+//	@OneToMany(mappedBy = "speed", orphanRemoval = true, fetch = FetchType.EAGER)
+//	@JsonManagedReference
+//	private List<Discount> discount = new ArrayList<>(); Code by Chat GPT
 
 
 	public Speed(Long id, @NotNull(message = "Chooser Your Speed") Integer mb) {

@@ -10,6 +10,8 @@ import com.hostmdy.wifiservice.domain.Speed;
 import com.hostmdy.wifiservice.repository.SpeedRepository;
 import com.hostmdy.wifiservice.service.SpeedService;
 
+import jakarta.validation.Valid;
+
 @Service
 public class SpeedServiceImpl implements SpeedService {
 	
@@ -57,6 +59,12 @@ public class SpeedServiceImpl implements SpeedService {
 	public Speed createSpeed(Speed speed) {
 		// TODO Auto-generated method stub
 		return speedRepository.save(speed);
+	}
+
+	@Override
+	public List<Speed> saveOrUpdateSpeeds(@Valid List<Speed> speeds) {
+		// TODO Auto-generated method stub
+		return (List<Speed>) speedRepository.saveAll(speeds);
 	}
 
 //	@Override

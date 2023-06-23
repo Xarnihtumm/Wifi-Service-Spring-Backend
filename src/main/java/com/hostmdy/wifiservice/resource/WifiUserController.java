@@ -43,7 +43,7 @@ public class WifiUserController {
 		if (responseErrorObject != null)
 			return responseErrorObject;
 
-		WifiUser createWifiUser = wifiUserService.createWifiUser(wifiUser);
+		WifiUser createWifiUser = wifiUserService.saveOrUpdate(wifiUser);
 		return new ResponseEntity<WifiUser>(createWifiUser, HttpStatus.CREATED);
 	}
 	

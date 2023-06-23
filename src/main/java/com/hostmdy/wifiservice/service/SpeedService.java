@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.hostmdy.wifiservice.domain.Speed;
 
+import jakarta.validation.Valid;
+
 
 public interface SpeedService {
 	List<Speed> findAll();
@@ -17,5 +19,6 @@ public interface SpeedService {
 	Speed saveOrUpdateSpeed (Speed speed);
 	
 	Speed createSpeed(Speed speed);
+	List<Speed> saveOrUpdateSpeeds(@Valid List<Speed> speeds);
 
 }
