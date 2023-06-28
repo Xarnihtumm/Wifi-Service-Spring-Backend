@@ -53,57 +53,129 @@
 //
 //}
 
-
 package com.hostmdy.wifiservice.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @NotBlank(message = "Please provide your name")
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotBlank(message = "Please provide your email")
-    @Email(message="You must to fill  your email")
-    private String email;
+	@NotBlank(message = "Please provide your name")
+	private String name;
 
-    @NotBlank(message = "Please provide your phone number")
-    private String phoneNumber;
+	@NotBlank(message = "Please provide your email")
+	@Email(message = "You must to fill  your email")
+	private String username;
 
-    @NotBlank(message = "Please provide your password")
-    private String password;
+	@NotBlank(message = "Please provide your phone number")
+	private String phoneNumber;
 
-    @NotBlank(message = "Please provide a role")
-    private String role;
-    
-    
-    
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-    
-    private List<Order> orders = new ArrayList<>();
+	@NotBlank(message = "Please provide your password")
+	private String password;
 
-    public User(String name, String email, String phoneNumber, String password, String role) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.role = role;
-    }
+	@Transient
+	private String confirmPassword;
+
+	@NotNull(message = "No Acess Your Location")
+	private Double longitude;
+
+	@NotNull(message = "No Access Your Location")
+	private Double latitude;
+	
+	@NotBlank(message = "Please provide a role")
+	private String role;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+	private List<Order> orders = new ArrayList<>();
+
+	
+	public User(Long id, @NotBlank(message = "Please provide your name") String name,
+			@NotBlank(message = "Please provide your email") @Email(message = "You must to fill  your email") String username,
+			@NotBlank(message = "Please provide your phone number") String phoneNumber,
+			@NotBlank(message = "Please provide your password") String password, String confirmPassword,
+			@NotNull(message = "No Acess Your Location") Double longitude,
+			@NotNull(message = "No Access Your Location") Double latitude,
+			@NotBlank(message = "Please provide a role") String role, List<Order> orders) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.username = username;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.confirmPassword = confirmPassword;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.role = role;
+		this.orders = orders;
+	}
+	
+	@Override
+	@JsonIgnore
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return username;
+	}
+
+	@Override
+	@JsonIgnore
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	
 }
-

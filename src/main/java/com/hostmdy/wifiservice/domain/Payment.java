@@ -37,9 +37,6 @@ public class Payment {
     private Order order;
 	
 	
-
-	
-	
 	@PrePersist
 	void OnCreate() {
 		this.date = LocalDate.now();
