@@ -2,6 +2,8 @@ package com.hostmdy.wifiservice.domain;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +36,7 @@ public class Payment {
 	
 	@OneToOne
     @JoinColumn(name = "order_id")
+	@JsonIgnore
     private Order order;
 	
 	

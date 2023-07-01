@@ -44,41 +44,7 @@ public class SpeedController {
 		this.planRepository = planRepository;
 	}
 
-//	@PostMapping("create/plan/{id}")
-//	public ResponseEntity<?> createSpeed(@PathVariable Long id,@Valid @RequestBody Speed speed, BindingResult result) {
-//		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
-//		if (responseErrorObject != null)
-//			return responseErrorObject;
-//		
-//		//WifiPlan plan = planRepository.findById(id).get();
-//		WifiPlan plan = planRepository.findById(id).get();
-//		 speed.setPlan(plan);
-//		 plan.getSpeed().add(speed);
-//		
-//System.out.println("Hahah");
-//		Speed createSpeed = speedService.saveOrUpdateSpeed(speed);
-//		return new ResponseEntity<Speed>(createSpeed, HttpStatus.CREATED);
-//	}
-	
-	
-//	@PostMapping("create/plan/{id}")
-//    public ResponseEntity<?> createSpeed(@PathVariable Long id, @Valid @RequestBody Speed speed,
-//            BindingResult result) {
-//        ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
-//        if (responseErrorObject != null)
-//            return responseErrorObject;
-//
-//        Optional<WifiPlan> planOptional = planRepository.findById(id);
-//        if (planOptional.isEmpty())
-//            return new ResponseEntity<String>("Plan with id = " + id + " not found", HttpStatus.NOT_FOUND);
-//
-//        WifiPlan plan = planOptional.get();
-//        speed.setPlan(plan);
-//        plan.getSpeed().add(speed);
-//
-//        Speed createdSpeed = speedService.saveOrUpdateSpeed(speed);
-//        return new ResponseEntity<Speed>(createdSpeed, HttpStatus.CREATED);
-//    }
+
 	
 	@PostMapping("create/plan/{id}")
     public ResponseEntity<?> createSpeed(@PathVariable Long id, @Valid @RequestBody List<Speed> speeds,
@@ -102,16 +68,7 @@ public class SpeedController {
     }
 
 	
-//	@PostMapping("/update")
-//	public ResponseEntity<?> updateSpeed(@Valid @RequestBody Speed speed, BindingResult result) {
-//		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
-//		if (responseErrorObject != null)
-//			return responseErrorObject;
-//
-//		WifiPlan updateWifiPlan = speedService.updateWifiPlan(wifiPlan);
-//		return new ResponseEntity<WifiPlan>(updateWifiPlan, HttpStatus.CREATED);
-//	}
-	
+
 	@GetMapping("/all")
 	public List<Speed> findAllPlan() {
 		return speedService.findAll();
@@ -127,17 +84,7 @@ public class SpeedController {
 		return new ResponseEntity<Speed>(speedOptional.get(), HttpStatus.OK);
 	}
 	
-//	@GetMapping("/name/{MB}")
-//	public ResponseEntity<?> findByName(@PathVariable Integer MB) {
-//		
-//		
-//		Optional<Speed> speedOptional = speedService.findByMB(MB);
-//
-//		if (speedOptional.isEmpty())
-//			return new ResponseEntity<String>("Plans with Name = " + MB + " not found", HttpStatus.NOT_FOUND);
-//
-//		return new ResponseEntity<Speed>(speedOptional.get(), HttpStatus.OK);
-//	}
+
 	
 
 	@DeleteMapping("/id/{id}")

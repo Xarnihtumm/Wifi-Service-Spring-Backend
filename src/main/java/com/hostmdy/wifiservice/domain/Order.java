@@ -31,7 +31,7 @@ public class Order {
 
 	private String accountName;
 
-	private Integer transactionNo;
+	private Long transactionNo;
 	
 	private Integer mb;
 	
@@ -65,7 +65,7 @@ public class Order {
 	private User user;
 
 	@OneToOne(mappedBy = "order")
-	@JsonIgnore
+	
 	private Payment payment;
 
 	@PrePersist
@@ -78,7 +78,7 @@ public class Order {
 		this.date = LocalDate.now();
 	}
 
-	public Order(Long orderId, String accountName, Integer transactionNo, Integer mb, Integer months,
+	public Order(Long orderId, String accountName, Long transactionNo, Integer mb, Integer months,
 			@NotNull(message = "Pay For Your Fee") Double total, LocalDate date, String orderStatus, WifiUser device,
 			WifiPlan plan, User user, Payment payment) {
 		super();
