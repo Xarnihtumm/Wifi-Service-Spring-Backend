@@ -61,7 +61,7 @@ public class Order {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
+	//@JsonIgnore
 	private User user;
 
 	@OneToOne(mappedBy = "order")

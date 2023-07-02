@@ -1,5 +1,6 @@
 package com.hostmdy.wifiservice.resource;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hostmdy.wifiservice.domain.Order;
+import com.hostmdy.wifiservice.domain.User;
 import com.hostmdy.wifiservice.domain.WifiPlan;
 import com.hostmdy.wifiservice.domain.WifiUser;
 import com.hostmdy.wifiservice.repository.UserRepository;
@@ -34,7 +36,7 @@ import jakarta.validation.Valid;
 public class OrderController {
 
 	private final OrderService orderService;
-	//private final UserRepository userRepository;
+	private final UserRepository userRepository;
 	private final WifiUserRepository wifiUserRepository;
 	private final WifiPlanRepository wifiPlanRepository;
 	private final ValidationErrorsMapService errorMapService;
@@ -45,34 +47,17 @@ public class OrderController {
 			ValidationErrorsMapService errorMapService) {
 		super();
 		this.orderService = orderService;
-		//this.userRepository = userRepository;
+		this.userRepository = userRepository;
 		this.wifiUserRepository = wifiUserRepository;
 		this.wifiPlanRepository = wifiPlanRepository;
 		this.errorMapService = errorMapService;
 	}
 
-//	@PostMapping("user/{id}/create")
-//	public ResponseEntity<?> createOrder(@PathVariable Long id, @Valid @RequestBody Order order, BindingResult result) {
-//		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
-//		if (responseErrorObject != null)
-//			return responseErrorObject;
-//		User user = userRepository.findById(id).get();
-//
-//		order.setUser(user);
-//		user.getOrders().add(order);
-//		
-//		
-//		
-//		
-////		
-//System.out.println(" Ko Ko zar Ni"+order.getDevice().getId());
-//		Order createOrder = orderService.createOrder(order);
-//		return new ResponseEntity<Order>(createOrder, HttpStatus.CREATED);
-//	}  Code by zar ni
+	
 
 //	@PostMapping("/create/user/{id}/{planId}/{deviceId}"
 	@PostMapping("/create/{planId}/{deviceId}")
-	public ResponseEntity<?> createOrder(/*{@PathVariable Long id,} */@PathVariable Long planId, @PathVariable Long deviceId, @Valid @RequestBody Order order, BindingResult result) {
+	public ResponseEntity<?> createOrder(/*{@PathVariable Long id,} */@PathVariable Long planId, @PathVariable Long deviceId, @Valid @RequestBody Order order, BindingResult result,Principal principal) {
 		ResponseEntity<?> responseErrorObject = errorMapService.validate(result);
 		if (responseErrorObject != null)
 			return responseErrorObject;
@@ -80,7 +65,24 @@ public class OrderController {
 //		User user = userRepository.findById(id).orElse(null);
 //		if (user == null)
 //			return new ResponseEntity<String>("User with id = " + id + " not found", HttpStatus.NOT_FOUND);
+		User user= userRepository.findByUsername(principal.getName()).get();
+		
+	if(user.getRole().equals("low")) {
+		if (user == null)
+		return new ResponseEntity<String>("Device with id = " + user + " not found", HttpStatus.NOT_FOUND);
 
+		WifiPlan plan = wifiPlanRepository.findById(planId).orElse(null);
+		if (plan == null)
+			return new ResponseEntity<String>("Plan with id = " + planId + " not found", HttpStatus.NOT_FOUND);
+
+		//order.setDevice(device);
+		order.setPlan(plan);
+		order.setUser(user);
+		//device.setOrder(order); // Set the order on the device
+		user.getOrders().add(order);
+	}
+	
+	if(user.getRole().equals("user")) {
 		WifiUser device = wifiUserRepository.findById(deviceId).orElse(null);
 		if (device == null)
 			return new ResponseEntity<String>("Device with id = " + deviceId + " not found", HttpStatus.NOT_FOUND);
@@ -94,7 +96,8 @@ public class OrderController {
 		//order.setUser(user);
 		device.setOrder(order); // Set the order on the device
 		//user.getOrders().add(order);
-
+	}
+	
 		Order createdOrder = orderService.createOrder(order);
 		return new ResponseEntity<Order>(createdOrder, HttpStatus.CREATED);
 	}
