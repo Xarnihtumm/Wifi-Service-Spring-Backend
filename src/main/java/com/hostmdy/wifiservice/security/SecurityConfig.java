@@ -19,7 +19,7 @@ import com.hostmdy.wifiservice.serviceImpl.CustomUserDetailServiceImpl;
 public class SecurityConfig {
 
 	static final String[] PUBLIC_MATCHER = { "/", "/favicon.ico", "/*/*.png", "/*/*.gif", "/*/*.svg", "/*/*.jpg",
-			"/*/*.html", "/*/*.js", "/*/*.css" };
+			"/*/*.html", "/*/*.js", "/*/*.css", "swagger-ui.html" };
 	static final String SIGNUP_URL = "/api/user/**";
 	static final String H2_URL = "/h2-console/**";
 
@@ -54,9 +54,8 @@ public class SecurityConfig {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().headers()
 				.frameOptions().sameOrigin().and().authorizeHttpRequests().requestMatchers(PUBLIC_MATCHER).permitAll()
-				.requestMatchers(SIGNUP_URL).permitAll()
-//			.requestMatchers(H2_URL).permitAll()
-				.anyRequest().authenticated();
+				.requestMatchers(SIGNUP_URL).permitAll().requestMatchers(H2_URL).permitAll().anyRequest()
+				.authenticated();
 
 		http.authenticationProvider(authenticationProvider());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -65,10 +64,10 @@ public class SecurityConfig {
 
 	}
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers(H2_URL);
-	}
+//	@Bean
+//	public WebSecurityCustomizer webSecurityCustomizer() {
+//		return (web) -> web.ignoring().requestMatchers(H2_URL);
+//	}
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {

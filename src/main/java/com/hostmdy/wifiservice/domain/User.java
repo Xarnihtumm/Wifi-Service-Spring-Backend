@@ -63,6 +63,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -97,6 +99,7 @@ public class User implements UserDetails {
 	private String phoneNumber;
 
 	@NotBlank(message = "Please provide your password")
+	//@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@Transient
